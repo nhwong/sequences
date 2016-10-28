@@ -1,15 +1,20 @@
 class PuzzleController < ApplicationController
 
-  def guess
-    @first_number = params[:first_number]
-    @second_number = params[:second_number]
-    @third_number = params[:third_number]
+  def clear_guesses
+    Guess.delete_all
+    guess
+  end
 
-    if @third_number.to_f > @second_number.to_f && @second_number.to_f > @first_number.to_f
-      @obeys_rule = "Yes"
-    else
-      @obeys_rule = "No"
+  def guess
+    new_guess = Guess.new
+    if params[:first_number] != nil
+      new_guess.first_num = params[:first_number]
+      new_guess.second_num = params[:second_number]
+      new_guess.third_num = params[:third_number]
+      new_guess.save
     end
+
+    @list = Guess.all
 
     render("guess.html.erb")
   end
